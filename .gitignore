@@ -1,0 +1,8 @@
+.vscode/
+a.out
+*.o
+*/*.o
+*/*/*.o
+*.log
+test.sh
+alientest*
