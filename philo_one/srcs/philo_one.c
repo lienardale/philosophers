@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 10:25:52 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 09:45:57 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/25 17:06:36 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,16 +103,16 @@ void	philo_one(t_world *philo, int check)
 	free(philo);
 }
 
-int	main(int ac, char **av)
+int		main(int ac, char **av)
 {
 	t_init	all;
 
 	if (ft_check_args(ac, av) || ft_atoi(av[1]) == 0)
 		return (printf("Invalid.\n"));
+	all.check = ft_atoi(av[1]);
 	all.philo = malloc(sizeof(t_world) * all.check);
 	if (!(all.philo))
 		return (printf("Malloc error.\n"));
-	all.check = ft_atoi(av[1]);
 	all.time_begin = ft_what_time_is_it();
 	all.i = -1;
 	all.full = 0;

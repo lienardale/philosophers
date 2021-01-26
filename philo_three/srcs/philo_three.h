@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:38:39 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 11:59:26 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:25:02 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include <stdbool.h>
 # include <sys/errno.h>
 
-typedef struct s_world
+typedef struct		s_world
 {
 	pid_t			*pid;
 	sem_t			*forks;
@@ -45,9 +45,9 @@ typedef struct s_world
 	int				id;
 	bool			alive;
 	int				*full;
-}				t_world;
+}					t_world;
 
-typedef struct s_init
+typedef struct		s_init
 {
 	int		check;
 	t_world	philo;
@@ -55,7 +55,7 @@ typedef struct s_init
 	long	time_begin;
 	int		full;
 	bool	alive;
-}				t_init;
+}					t_init;
 
 void				ft_init_philo(t_init *all, int ac, char **av);
 int					ft_check_args(int ac, char **av);

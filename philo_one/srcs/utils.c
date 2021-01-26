@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 11:22:31 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 09:51:12 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:17:42 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_init_philo(t_init all, int ac, char **av)
 	all.philo[all.i].full = &all.full;
 }
 
-int	ft_atoi(char *str)
+int		ft_atoi(char *str)
 {
 	int	i;
 	int	neg;

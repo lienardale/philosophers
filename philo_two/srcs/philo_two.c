@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 16:08:39 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 10:32:47 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/25 17:06:48 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,17 +93,17 @@ void	philo_two(t_world *philo, int check)
 	sem_post(philo->forks);
 }
 
-int	main(int ac, char **av)
+int		main(int ac, char **av)
 {
-	t_init	all;	
+	t_init	all;
 
 	if (ft_check_args(ac, av) || ft_atoi(av[1]) == 0)
 		return (printf("Invalid.\n"));
+	all.check = ft_atoi(av[1]);
 	all.philo = malloc(sizeof(t_world) * all.check);
 	if (!(all.philo))
 		return (printf("Malloc error.\n"));
 	ft_sem_unlink_all();
-	all.check = ft_atoi(av[1]);
 	all.time_begin = ft_what_time_is_it();
 	all.i = 0;
 	all.full = 0;
@@ -113,7 +113,6 @@ int	main(int ac, char **av)
 	sem_close(all.philo[0].lock_forks);
 	sem_close(all.philo[0].state);
 	sem_close(all.philo[0].nbeat);
-	// sem_close(all.philo[0].output);
 	ft_sem_unlink_all();
 	free(all.philo);
 	return (0);

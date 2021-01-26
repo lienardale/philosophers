@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 09:43:27 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:17:12 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_output(t_world *philo, char *what)
 		pthread_mutex_unlock(philo->output);
 }
 
-int	ft_check_args(int ac, char **av)
+int		ft_check_args(int ac, char **av)
 {
 	int	i;
 	int	j;

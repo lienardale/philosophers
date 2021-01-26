@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:43:35 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 09:48:14 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:23:25 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # include <sys/wait.h>
 # include <stdbool.h>
 
-typedef struct s_world
+typedef struct		s_world
 {
 	pthread_mutex_t	right_fork;
 	pthread_mutex_t	*left_fork;
@@ -44,16 +44,16 @@ typedef struct s_world
 	int				id;
 	bool			alive;
 	int				*full;
-}				t_world;
+}					t_world;
 
-typedef struct s_init
+typedef struct		s_init
 {
 	int		check;
 	t_world	*philo;
 	int		i;
 	long	time_begin;
 	int		full;
-}				t_init;
+}					t_init;
 
 void				ft_init_philo(t_init all, int c, char **av);
 int					ft_check_args(int ac, char **av);

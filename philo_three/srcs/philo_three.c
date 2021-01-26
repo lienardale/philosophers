@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 11:59:11 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/25 16:19:44 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,9 @@ void	philo_three(t_world philo, int check)
 	free(philo.pid);
 }
 
-int	main(int ac, char **av)
+int		main(int ac, char **av)
 {
-	t_init	all;	
+	t_init	all;
 
 	if (ft_check_args(ac, av) || ft_atoi(av[1]) == 0)
 		return (printf("Invalid.\n"));
