@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_one.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
+/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 10:25:52 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/27 15:31:20 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/27 15:58:48 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	ft_all_ate(t_world *philo)
 	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
 		- philo->t_begin, philo->nb_must_eat);
 	*(philo->alive) = false;
-	// pthread_mutex_unlock(philo->state);
 }
 
 void	*ft_supervise(void *ptr)
@@ -27,7 +26,6 @@ void	*ft_supervise(void *ptr)
 	long now;
 
 	philo = (t_world *)ptr;
-	// pthread_detach(philo->sthid);
 	while (*(philo->alive))
 	{
 		if (ft_what_time_is_it() - philo->t_last_eat > philo->t_todie
@@ -35,13 +33,8 @@ void	*ft_supervise(void *ptr)
 		{
 			*(philo->alive) = false;
 			now = ft_what_time_is_it() - philo->t_begin;
-			// pthread_mutex_lock(philo->output);
+			pthread_mutex_lock(philo->output);
 			printf("%ld #%d %s\n", now, philo->id, "has DIED");
-			// pthread_mutex_unlock(philo->output);
-			// pthread_mutex_destroy(philo->output);
-			// pthread_detach(philo->sthid);
-			// pthread_mutex_unlock(philo->state);
-			// printf("philo|%d| returning from superv\n", philo->id);
 			return (NULL);
 		}
 		else if (*(philo->alive) && philo->nb_must_eat != -1
@@ -54,25 +47,15 @@ void	*ft_supervise(void *ptr)
 			return (NULL);
 		}
 	}
-	// printf("philo|%d| returning from superv\n", philo->id);
-	// pthread_detach(philo->thid);
 	return (NULL);
 }
 
 void	*ft_loop(void *ptr)
 {
 	t_world		*philo;
-	// pthread_t	thid;
 
 	philo = (t_world *)ptr;
 	pthread_create(&philo->sthid, NULL, ft_supervise, philo);
-	pthread_detach(philo->sthid);
-	// pthread_detach(philo->thid);
-	// if (!ret)
-	// {
-	// 	// pthread_detach(philo->thid);
-	// 	return (NULL);
-	// }
 	// pthread_detach(philo->sthid);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->t_toeat * 0.9);
@@ -86,56 +69,39 @@ void	*ft_loop(void *ptr)
 		ft_output(philo, "is eating");
 		ft_usleep(philo->t_toeat);
 		philo->nb_ate++;
-		ft_output(philo, "is sleeping");
 		pthread_mutex_unlock(&philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
+		ft_output(philo, "is sleeping");
 		ft_usleep(philo->t_tosleep);
 		ft_output(philo, "is thinking");
 	}
-	// printf("philo|%d| returning from loop\n", philo->id);
-	// pthread_detach(philo->thid);
 	return (NULL);
 }
 
 void	philo_one(t_world *philo, int check)
 {
 	int				i;
-	// pthread_t		thid;
-	// pthread_mutex_t	state;
 	pthread_mutex_t	output;
 	pthread_mutex_t	nbeat;
 
 	i = -1;
-	// pthread_mutex_init(&state, NULL);
 	pthread_mutex_init(&output, NULL);
-	// pthread_mutex_lock(&state);
 	while (++i < check)
 	{
-		// philo[i].state = &state;
 		philo[i].output = &output;
 		philo[i].nbeat = &nbeat;
+		// ft_output(&philo[i], "is created");
 		pthread_create(&philo[i].thid, NULL, ft_loop, &philo[i]);
-		// printf("thread:|%d| created\n",i);
-		// pthread_detach(philo[i].thid);
 	}
-	// pthread_mutex_lock(&state);
 	i = -1;
 	while (++i < check)
 	{
-	// 	printf("%d\n", i);
-		// printf("thread:|%d| waiting to be joined\n",i);
 		pthread_join(philo[i].thid, NULL);
-		// printf("thread:|%d| joined\n",i);
-		// pthread_join(philo[i].sthid, NULL);
-		// pthread_detach(philo[i].sthid);
-
-		// pthread_detach(philo[i].thid);
 	}
 	i= 0;
 	while (i < check)
 		pthread_mutex_destroy(&philo[i++].right_fork);
 	pthread_mutex_destroy(&output);
-	// pthread_mutex_destroy(&state);
 	free(philo);
 }
 

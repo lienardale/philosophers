@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
+/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 11:22:31 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/27 14:44:58 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/27 15:57:07 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	ft_init_philo(t_init all, int ac, char **av)
 	all.philo[all.i].id = all.i + 1;
 	all.philo[all.i].alive = &all.alive;
 	all.philo[all.i].full = &all.full;
+	// ft_output(&all.philo[all.i], "is created");
 }
 
 int		ft_atoi(char *str)
