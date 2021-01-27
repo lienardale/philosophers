@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 10:25:52 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/27 15:58:48 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/27 19:09:55 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	*ft_loop(void *ptr)
 
 	philo = (t_world *)ptr;
 	pthread_create(&philo->sthid, NULL, ft_supervise, philo);
-	// pthread_detach(philo->sthid);
+	pthread_detach(philo->sthid);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->t_toeat * 0.9);
 	while (*(philo->alive) && (philo->nb_must_eat == -1 || philo->nb_must_eat > philo->nb_ate))
@@ -97,6 +97,7 @@ void	philo_one(t_world *philo, int check)
 	while (++i < check)
 	{
 		pthread_join(philo[i].thid, NULL);
+		// printf("thread %d joined\n", philo->id);
 	}
 	i= 0;
 	while (i < check)
