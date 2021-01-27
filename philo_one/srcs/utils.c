@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 11:22:31 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 16:17:42 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/27 14:44:58 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_init_philo(t_init all, int ac, char **av)
 	all.philo[all.i].t_last_eat = all.time_begin;
 	all.philo[all.i].nb_ate = 0;
 	all.philo[all.i].id = all.i + 1;
-	all.philo[all.i].alive = true;
+	all.philo[all.i].alive = &all.alive;
 	all.philo[all.i].full = &all.full;
 }
 

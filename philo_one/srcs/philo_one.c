@@ -6,7 +6,7 @@
 /*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 10:25:52 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/27 11:56:37 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/27 15:31:20 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,34 @@ void	ft_all_ate(t_world *philo)
 	pthread_mutex_lock(philo->output);
 	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
 		- philo->t_begin, philo->nb_must_eat);
-	pthread_mutex_unlock(philo->state);
+	*(philo->alive) = false;
+	// pthread_mutex_unlock(philo->state);
 }
 
 void	*ft_supervise(void *ptr)
 {
 	t_world	*philo;
+	long now;
 
 	philo = (t_world *)ptr;
 	// pthread_detach(philo->sthid);
-	while (1)
+	while (*(philo->alive))
 	{
-		if (ft_what_time_is_it() - philo->t_last_eat > philo->t_todie)
+		if (ft_what_time_is_it() - philo->t_last_eat > philo->t_todie
+			&& *(philo->alive))
 		{
-			philo->alive = false;
-			ft_output(philo, "has died");
+			*(philo->alive) = false;
+			now = ft_what_time_is_it() - philo->t_begin;
+			// pthread_mutex_lock(philo->output);
+			printf("%ld #%d %s\n", now, philo->id, "has DIED");
+			// pthread_mutex_unlock(philo->output);
+			// pthread_mutex_destroy(philo->output);
+			// pthread_detach(philo->sthid);
 			// pthread_mutex_unlock(philo->state);
+			// printf("philo|%d| returning from superv\n", philo->id);
 			return (NULL);
 		}
-		else if (philo->nb_must_eat != -1
+		else if (*(philo->alive) && philo->nb_must_eat != -1
 			&& philo->nb_ate >= philo->nb_must_eat)
 		{
 			if (philo->nb_ate == philo->nb_must_eat)
@@ -45,6 +54,8 @@ void	*ft_supervise(void *ptr)
 			return (NULL);
 		}
 	}
+	// printf("philo|%d| returning from superv\n", philo->id);
+	// pthread_detach(philo->thid);
 	return (NULL);
 }
 
@@ -54,12 +65,18 @@ void	*ft_loop(void *ptr)
 	// pthread_t	thid;
 
 	philo = (t_world *)ptr;
-	// pthread_detach(philo->thid);
 	pthread_create(&philo->sthid, NULL, ft_supervise, philo);
+	pthread_detach(philo->sthid);
+	// pthread_detach(philo->thid);
+	// if (!ret)
+	// {
+	// 	// pthread_detach(philo->thid);
+	// 	return (NULL);
+	// }
 	// pthread_detach(philo->sthid);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->t_toeat * 0.9);
-	while (philo->nb_must_eat == -1 || philo->nb_must_eat > philo->nb_ate)
+	while (*(philo->alive) && (philo->nb_must_eat == -1 || philo->nb_must_eat > philo->nb_ate))
 	{
 		pthread_mutex_lock(&philo->right_fork);
 		ft_output(philo, "has taken a fork");
@@ -68,13 +85,15 @@ void	*ft_loop(void *ptr)
 		philo->t_last_eat = ft_what_time_is_it();
 		ft_output(philo, "is eating");
 		ft_usleep(philo->t_toeat);
-		pthread_mutex_unlock(&philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
 		philo->nb_ate++;
 		ft_output(philo, "is sleeping");
+		pthread_mutex_unlock(&philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
 		ft_usleep(philo->t_tosleep);
 		ft_output(philo, "is thinking");
 	}
+	// printf("philo|%d| returning from loop\n", philo->id);
+	// pthread_detach(philo->thid);
 	return (NULL);
 }
 
@@ -96,17 +115,21 @@ void	philo_one(t_world *philo, int check)
 		philo[i].output = &output;
 		philo[i].nbeat = &nbeat;
 		pthread_create(&philo[i].thid, NULL, ft_loop, &philo[i]);
+		// printf("thread:|%d| created\n",i);
 		// pthread_detach(philo[i].thid);
 	}
 	// pthread_mutex_lock(&state);
 	i = -1;
 	while (++i < check)
 	{
-		printf("%d\n", i);
+	// 	printf("%d\n", i);
+		// printf("thread:|%d| waiting to be joined\n",i);
 		pthread_join(philo[i].thid, NULL);
-		pthread_join(philo[i].sthid, NULL);
-	// 	pthread_detach(philo[i].sthid);
-	// 	pthread_detach(philo[i].thid);
+		// printf("thread:|%d| joined\n",i);
+		// pthread_join(philo[i].sthid, NULL);
+		// pthread_detach(philo[i].sthid);
+
+		// pthread_detach(philo[i].thid);
 	}
 	i= 0;
 	while (i < check)
@@ -129,6 +152,7 @@ int		main(int ac, char **av)
 	all.time_begin = ft_what_time_is_it();
 	all.i = -1;
 	all.full = 0;
+	all.alive = true;
 	while (++all.i < all.check)
 	{
 		ft_init_philo(all, ac, av);
