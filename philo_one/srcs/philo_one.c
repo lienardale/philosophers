@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 10:25:52 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/27 19:09:55 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/27 19:50:37 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	ft_all_ate(t_world *philo)
 {
 	pthread_mutex_lock(philo->output);
+	*(philo->alive) = false;
 	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
 		- philo->t_begin, philo->nb_must_eat);
-	*(philo->alive) = false;
 }
 
 void	*ft_supervise(void *ptr)
