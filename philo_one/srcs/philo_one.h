@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_one.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:43:35 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 16:23:25 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/27 11:28:54 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef struct		s_world
 	pthread_mutex_t	*state;
 	pthread_mutex_t	*nbeat;
 	pthread_mutex_t	*output;
+	pthread_t		thid;
+	pthread_t		sthid;
 	int				nb_philo;
 	int				t_todie;
 	int				t_toeat;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_one.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 10:25:52 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 17:06:36 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/27 11:56:37 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,14 @@ void	*ft_supervise(void *ptr)
 	t_world	*philo;
 
 	philo = (t_world *)ptr;
+	// pthread_detach(philo->sthid);
 	while (1)
 	{
 		if (ft_what_time_is_it() - philo->t_last_eat > philo->t_todie)
 		{
 			philo->alive = false;
 			ft_output(philo, "has died");
-			pthread_mutex_unlock(philo->state);
+			// pthread_mutex_unlock(philo->state);
 			return (NULL);
 		}
 		else if (philo->nb_must_eat != -1
@@ -50,10 +51,12 @@ void	*ft_supervise(void *ptr)
 void	*ft_loop(void *ptr)
 {
 	t_world		*philo;
-	pthread_t	thid;
+	// pthread_t	thid;
 
 	philo = (t_world *)ptr;
-	pthread_create(&thid, NULL, ft_supervise, philo);
+	// pthread_detach(philo->thid);
+	pthread_create(&philo->sthid, NULL, ft_supervise, philo);
+	// pthread_detach(philo->sthid);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->t_toeat * 0.9);
 	while (philo->nb_must_eat == -1 || philo->nb_must_eat > philo->nb_ate)
@@ -78,28 +81,38 @@ void	*ft_loop(void *ptr)
 void	philo_one(t_world *philo, int check)
 {
 	int				i;
-	pthread_t		thid;
-	pthread_mutex_t	state;
+	// pthread_t		thid;
+	// pthread_mutex_t	state;
 	pthread_mutex_t	output;
 	pthread_mutex_t	nbeat;
 
 	i = -1;
-	pthread_mutex_init(&state, NULL);
+	// pthread_mutex_init(&state, NULL);
 	pthread_mutex_init(&output, NULL);
-	pthread_mutex_lock(&state);
+	// pthread_mutex_lock(&state);
 	while (++i < check)
 	{
-		philo[i].state = &state;
+		// philo[i].state = &state;
 		philo[i].output = &output;
 		philo[i].nbeat = &nbeat;
-		pthread_create(&thid, NULL, ft_loop, &philo[i]);
+		pthread_create(&philo[i].thid, NULL, ft_loop, &philo[i]);
+		// pthread_detach(philo[i].thid);
 	}
-	pthread_mutex_lock(&state);
-	i = 0;
+	// pthread_mutex_lock(&state);
+	i = -1;
+	while (++i < check)
+	{
+		printf("%d\n", i);
+		pthread_join(philo[i].thid, NULL);
+		pthread_join(philo[i].sthid, NULL);
+	// 	pthread_detach(philo[i].sthid);
+	// 	pthread_detach(philo[i].thid);
+	}
+	i= 0;
 	while (i < check)
 		pthread_mutex_destroy(&philo[i++].right_fork);
-	pthread_mutex_destroy(&state);
 	pthread_mutex_destroy(&output);
+	// pthread_mutex_destroy(&state);
 	free(philo);
 }
 
