@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 10:25:52 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/27 19:50:37 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 10:11:09 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_all_ate(t_world *philo)
 {
-	pthread_mutex_lock(philo->output);
+	// pthread_mutex_lock(philo->output);
 	*(philo->alive) = false;
 	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
 		- philo->t_begin, philo->nb_must_eat);
@@ -34,7 +34,7 @@ void	*ft_supervise(void *ptr)
 			*(philo->alive) = false;
 			now = ft_what_time_is_it() - philo->t_begin;
 			pthread_mutex_lock(philo->output);
-			printf("%ld #%d %s\n", now, philo->id, "has DIED");
+			printf("%ld #%d %s\n", now, philo->id, "has died");
 			return (NULL);
 		}
 		else if (*(philo->alive) && philo->nb_must_eat != -1

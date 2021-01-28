@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/27 19:01:26 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 10:09:59 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	ft_output(t_world *philo, char *what)
 	if (*(philo->alive) == true)
 	{
 		pthread_mutex_lock(philo->output);
-	// if (*(philo->alive) == true)
-		printf("%ld #%d %s\n", ft_what_time_is_it() - philo->t_begin, philo->id, what);
+		if (*(philo->alive) == true)
+			printf("%ld #%d %s\n", ft_what_time_is_it() - philo->t_begin, philo->id, what);
 		pthread_mutex_unlock(philo->output);
 	}
 }
