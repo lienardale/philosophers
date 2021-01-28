@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_one.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 10:25:52 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 10:11:09 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 10:48:09 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	ft_all_ate(t_world *philo)
 {
-	// pthread_mutex_lock(philo->output);
 	*(philo->alive) = false;
 	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
 		- philo->t_begin, philo->nb_must_eat);
@@ -82,23 +81,17 @@ void	philo_one(t_world *philo, int check)
 {
 	int				i;
 	pthread_mutex_t	output;
-	pthread_mutex_t	nbeat;
 
 	i = -1;
 	pthread_mutex_init(&output, NULL);
 	while (++i < check)
 	{
 		philo[i].output = &output;
-		philo[i].nbeat = &nbeat;
-		// ft_output(&philo[i], "is created");
 		pthread_create(&philo[i].thid, NULL, ft_loop, &philo[i]);
 	}
 	i = -1;
 	while (++i < check)
-	{
 		pthread_join(philo[i].thid, NULL);
-		// printf("thread %d joined\n", philo->id);
-	}
 	i= 0;
 	while (i < check)
 		pthread_mutex_destroy(&philo[i++].right_fork);
@@ -121,9 +114,7 @@ int		main(int ac, char **av)
 	all.full = 0;
 	all.alive = true;
 	while (++all.i < all.check)
-	{
 		ft_init_philo(all, ac, av);
-	}
 	all.philo[0].left_fork = &all.philo[all.philo[0].nb_philo - 1].right_fork;
 	philo_one(all.philo, all.check);
 	return (0);

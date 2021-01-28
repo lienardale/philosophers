@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 11:22:31 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/27 19:01:39 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 10:55:10 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	ft_init_philo(t_init all, int ac, char **av)
 	all.philo[all.i].id = all.i + 1;
 	all.philo[all.i].alive = &all.alive;
 	all.philo[all.i].full = &all.full;
-	// ft_output(&all.philo[all.i], "is created");
 }
 
 int		ft_atoi(char *str)
@@ -73,8 +72,10 @@ long	ft_what_time_is_it(void)
 void	ft_usleep(int length)
 {
 	long	begin;
+	long	tmp;
 
 	begin = ft_what_time_is_it();
-	while (ft_what_time_is_it() < begin + length)
+	tmp = begin + length;
+	while (ft_what_time_is_it() < tmp)
 		usleep(length);
 }

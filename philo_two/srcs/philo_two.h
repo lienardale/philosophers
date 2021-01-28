@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_two.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 16:08:36 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 16:23:39 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 16:26:13 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ typedef struct		s_world
 {
 	sem_t			*forks;
 	sem_t			*lock_forks;
-	sem_t			*state;
-	sem_t			*nbeat;
 	sem_t			*output;
+	pthread_t		thid;
+	pthread_t		sthid;
 	int				nb_philo;
 	int				t_todie;
 	int				t_toeat;
@@ -43,7 +43,7 @@ typedef struct		s_world
 	long			t_last_eat;
 	int				nb_ate;
 	int				id;
-	bool			alive;
+	bool			*alive;
 	int				*full;
 }					t_world;
 
@@ -65,5 +65,7 @@ void				ft_usleep(int length);
 int					ft_atoi(char *str);
 void				ft_sem_unlink_all(void);
 void				ft_create_philos(t_world *philo, int i);
+void				*ft_calloc(size_t count, size_t size);
+void				ft_bzero(void *s, size_t n);
 
 #endif

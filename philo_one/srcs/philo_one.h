@@ -6,7 +6,7 @@
 /*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:43:35 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/27 14:41:47 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/28 10:45:43 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ typedef struct		s_world
 {
 	pthread_mutex_t	right_fork;
 	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*state;
-	pthread_mutex_t	*nbeat;
+	// pthread_mutex_t	*state;
+	// pthread_mutex_t	*nbeat;
 	pthread_mutex_t	*output;
 	pthread_t		thid;
 	pthread_t		sthid;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 11:22:31 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 16:19:15 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 16:12:47 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	ft_init_philo(t_init all, int ac, char **av)
 {
 	all.philo[0].forks = sem_open("forks", O_CREAT | O_EXCL, 0700, all.check);
 	all.philo[0].lock_forks = sem_open("lock_forks", O_CREAT | O_EXCL, 0700, 1);
-	all.philo[0].state = sem_open("state", O_CREAT | O_EXCL, 0700, 0);
-	all.philo[0].nbeat = sem_open("nbeat", O_CREAT | O_EXCL, 0700, 0);
 	all.philo[0].output = sem_open("output", O_CREAT | O_EXCL, 0700, 1);
 	all.philo[0].nb_philo = all.check;
 	all.philo[0].t_todie = ft_atoi(av[2]);
@@ -31,28 +29,29 @@ void	ft_init_philo(t_init all, int ac, char **av)
 	all.philo[0].t_last_eat = all.time_begin;
 	all.philo[0].nb_ate = 0;
 	all.philo[0].id = 1;
-	all.philo[0].alive = true;
+	all.philo[0].alive = &all.alive;
 	all.philo[0].full = &all.full;
 }
 
 void	ft_create_philos(t_world *philo, int i)
-{
-	philo[i].state = philo[0].state;
-	philo[i].output = philo[0].output;
-	philo[i].nbeat = philo[0].nbeat;
-	philo[i].forks = philo[0].forks;
-	philo[i].lock_forks = philo[0].lock_forks;
-	philo[i].nb_philo = philo[0].nb_philo;
-	philo[i].t_todie = philo[0].t_todie;
-	philo[i].t_toeat = philo[0].t_toeat;
-	philo[i].t_tosleep = philo[0].t_tosleep;
-	philo[i].t_begin = ft_what_time_is_it();
-	philo[i].nb_must_eat = philo[0].nb_must_eat;
-	philo[i].t_last_eat = philo[0].t_begin;
-	philo[i].nb_ate = 0;
-	philo[i].id = philo[i - 1].id + 1;
-	philo[i].alive = true;
-	philo[i].full = philo[0].full;
+{;
+	if (i != 0)
+	{
+		philo[i].output = philo[0].output;
+		philo[i].forks = philo[0].forks;
+		philo[i].lock_forks = philo[0].lock_forks;
+		philo[i].nb_philo = philo[0].nb_philo;
+		philo[i].t_todie = philo[0].t_todie;
+		philo[i].t_toeat = philo[0].t_toeat;
+		philo[i].t_tosleep = philo[0].t_tosleep;
+		philo[i].t_begin = ft_what_time_is_it();
+		philo[i].nb_must_eat = philo[0].nb_must_eat;
+		philo[i].t_last_eat = philo[0].t_begin;
+		philo[i].nb_ate = 0;
+		philo[i].id = philo[i - 1].id + 1;
+		philo[i].alive = philo[0].alive;
+		philo[i].full = philo[0].full;
+	}
 }
 
 long	ft_what_time_is_it(void)
@@ -67,9 +66,11 @@ long	ft_what_time_is_it(void)
 void	ft_usleep(int length)
 {
 	long	begin;
+	long	tmp;
 
 	begin = ft_what_time_is_it();
-	while (ft_what_time_is_it() < begin + length)
+	tmp = begin + length;
+	while (ft_what_time_is_it() < tmp)
 		usleep(length);
 }
 
@@ -77,7 +78,5 @@ void	ft_sem_unlink_all(void)
 {
 	sem_unlink("forks");
 	sem_unlink("lock_forks");
-	sem_unlink("state");
-	sem_unlink("nbeat");
 	sem_unlink("output");
 }
