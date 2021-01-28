@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 16:19:44 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 20:06:13 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,19 @@ void	*ft_supervise(void *ptr)
 	t_world	*philo;
 
 	philo = (t_world *)ptr;
-	while (philo->alive == true)
+	while (*(philo->alive) == true)
 	{
-		if (ft_what_time_is_it() - philo->t_last_eat > philo->t_todie)
+		if (ft_what_time_is_it() - philo->t_last_eat > philo->t_todie
+			&& *(philo->alive))
 		{
-			philo->alive = false;
-			ft_output(*philo, "has died");
+			*(philo->alive) = false;
+			sem_wait(philo->output);
+			printf("%ld #%d %s\n",
+				ft_what_time_is_it() - philo->t_begin,
+				philo->id, "has died");
 			exit(0);
 		}
-		else if (philo->nb_must_eat != -1
+		else if (*(philo->alive) &&philo->nb_must_eat != -1
 			&& philo->nb_ate >= philo->nb_must_eat)
 		{
 			if (philo->nb_ate == philo->nb_must_eat)
@@ -46,10 +50,8 @@ void	*ft_supervise(void *ptr)
 
 void	ft_loop(t_world philo)
 {
-	pthread_t	thid;
-
-	pthread_create(&thid, NULL, ft_supervise, &philo);
-	while (philo.alive == true
+	pthread_create(&philo.thid, NULL, ft_supervise, &philo);
+	while (*(philo.alive) == true
 		&& (philo.nb_must_eat == -1 || philo.nb_must_eat > philo.nb_ate))
 	{
 		sem_wait(philo.lock_forks);
@@ -68,6 +70,7 @@ void	ft_loop(t_world philo)
 		ft_usleep(philo.t_tosleep);
 		ft_output(philo, "is thinking");
 	}
+	pthread_join(philo.thid, NULL);
 }
 
 void	philo_three(t_world philo, int check)
@@ -106,6 +109,7 @@ int		main(int ac, char **av)
 	all.time_begin = ft_what_time_is_it();
 	all.i = 0;
 	all.full = 0;
+	all.alive = true;
 	ft_init_philo(&all, ac, av);
 	philo_three(all.philo, all.check);
 	sem_close(all.philo.forks);

@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 11:22:31 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 16:20:06 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 19:59:09 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_init_philo(t_init *all, int ac, char **av)
 	all->philo.t_last_eat = all->time_begin;
 	all->philo.nb_ate = 0;
 	all->philo.id = 1;
-	all->philo.alive = true;
+	all->philo.alive = &all->alive;
 	all->philo.full = &all->full;
 }
 

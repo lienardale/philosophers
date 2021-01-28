@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:38:39 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/25 16:25:02 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 19:57:15 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef struct		s_world
 	sem_t			*lock_forks;
 	sem_t			*nbeat;
 	sem_t			*output;
+	pthread_t		thid;
+	pthread_t		sthid;
 	int				nb_philo;
 	int				t_todie;
 	int				t_toeat;
@@ -43,7 +45,7 @@ typedef struct		s_world
 	long			t_last_eat;
 	int				nb_ate;
 	int				id;
-	bool			alive;
+	bool			*alive;
 	int				*full;
 }					t_world;
 
