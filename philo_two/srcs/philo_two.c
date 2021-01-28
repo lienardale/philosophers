@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_two.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
+/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 16:08:39 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 16:33:28 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/28 18:36:37 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	*ft_supervise(void *ptr)
 	philo = (t_world *)ptr;
 	while (*(philo->alive) == true)
 	{
-		if (ft_what_time_is_it() - philo->t_last_eat > philo->t_todie)
+		if (ft_what_time_is_it() - philo->t_last_eat > philo->t_todie
+			&& *(philo->alive))
 		{
 			*(philo->alive) = false;
 			sem_wait(philo->output);
@@ -35,7 +36,7 @@ void	*ft_supervise(void *ptr)
 				philo->id, "has died");
 			return (NULL);
 		}
-		else if (philo->nb_must_eat != -1
+		else if (*(philo->alive) && philo->nb_must_eat != -1
 			&& philo->nb_ate >= philo->nb_must_eat)
 		{
 			if (philo->nb_ate == philo->nb_must_eat)
@@ -54,7 +55,6 @@ void	*ft_loop(void *ptr)
 
 	philo = (t_world *)ptr;
 	pthread_create(&philo->sthid, NULL, ft_supervise, philo);
-	pthread_detach(philo->sthid);
 	while (*(philo->alive) == true
 		&& (philo->nb_must_eat == -1 || philo->nb_must_eat > philo->nb_ate))
 	{
@@ -74,6 +74,7 @@ void	*ft_loop(void *ptr)
 		ft_usleep(philo->t_tosleep);
 		ft_output(philo, "is thinking");
 	}
+	pthread_join(philo->sthid, NULL);
 	return (NULL);
 }
 
@@ -85,16 +86,11 @@ void	philo_two(t_world *philo, int check)
 	while (++i < check)
 	{
 		ft_create_philos(philo, i);
-		if (pthread_create(&philo->thid, NULL, ft_loop, &philo[i]))
-			printf ("thread cration pb\n");
+		pthread_create(&philo[i].thid, NULL, ft_loop, &philo[i]);
 	}
-	// ft_usleep(5000);
 	i = -1;
 	while (++i < check)
-	{
 		pthread_join(philo[i].thid, NULL);
-		printf ("thread philo#%d is joined\n", philo->id);
-	}
 	sem_post(philo->lock_forks);
 	sem_post(philo->forks);
 	sem_post(philo->forks);
