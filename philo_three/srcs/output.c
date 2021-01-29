@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   output.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 20:00:13 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/29 10:52:23 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
 
-void	ft_output(t_world philo, char *what)
+void	ft_output(t_world *philo, char *what)
 {
 	long	now;
 
-	now = ft_what_time_is_it() - philo.t_begin;
-	if (*(philo.alive))
+	now = ft_what_time_is_it() - philo->t_begin;
+	if (*(philo->alive))
 	{
-		sem_wait(philo.output);
-		if (*(philo.alive))
-			printf("%ld #%d %s\n", now, philo.id, what);
-		sem_post(philo.output);
+		sem_wait(philo->output);
+		if (*(philo->alive))
+			printf("%ld #%d %s\n", now, philo->id, what);
+		sem_post(philo->output);
 	}
 }
 
@@ -48,21 +48,24 @@ int		ft_check_args(int ac, char **av)
 	return (0);
 }
 
-void	ft_wait(t_world philo)
+void	ft_wait(t_world *philo)
 {
 	int		i;
 	int		status;
 	pid_t	wpid;
 
 	i = 0;
-	while (i <= philo.nb_philo)
+	while (i <= philo->nb_philo)
 	{
 		wpid = waitpid(-1, &status, 0);
 		if (WEXITSTATUS(status) == 0)
+		{
+			ft_free_all(philo);
 			break ;
+		}
 		else
 			i++;
-		if (i == philo.nb_philo)
-			ft_all_ate(&philo);
+		if (i == philo->nb_philo)
+			ft_all_ate(philo);
 	}
 }

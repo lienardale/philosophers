@@ -2,7 +2,7 @@ NAME = philo_three
 
 CC = clang
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 THREADS = -lpthread
 

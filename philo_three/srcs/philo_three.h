@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_three.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:38:39 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 20:29:08 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/29 09:55:28 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ typedef struct		s_init
 
 void				ft_init_philo(t_init *all, int ac, char **av);
 int					ft_check_args(int ac, char **av);
-void				ft_output(t_world philo, char *what);
+void				ft_output(t_world *philo, char *what);
 long				ft_what_time_is_it(void);
 void				ft_usleep(int length);
 int					ft_atoi(char *str);
 void				ft_sem_unlink_all(void);
 void				ft_free_all(t_world *philo);
-void				ft_wait(t_world philo);
+void				ft_wait(t_world *philo);
 void				ft_all_ate(t_world *philo);
 
 #endif
