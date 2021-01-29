@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_three.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
+/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 15:39:29 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/29 15:47:26 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,11 +131,11 @@ void	philo_three(t_world *philo, int check)
 
 void	ft_free_all(t_world *philo)
 {
-	if (philo->pid)
-	{
-		free(philo->pid);
-		philo->pid = NULL;
-	}
+	// if (philo->pid)
+	// {
+	// 	free(philo->pid);
+	// 	philo->pid = NULL;
+	// }
 	// pthread_join(philo->thid, NULL);
 	sem_close(philo->forks);
 	sem_close(philo->lock_forks);

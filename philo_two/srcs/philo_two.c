@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 16:08:39 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 19:56:30 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/29 16:21:10 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	*ft_supervise(void *ptr)
 			&& *(philo->alive))
 		{
 			*(philo->alive) = false;
-			sem_wait(philo->output);
+			// sem_wait(philo->output);
 			printf("%ld #%d %s\n",
 				ft_what_time_is_it() - philo->t_begin,
 				philo->id, "has died");
