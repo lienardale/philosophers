@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
+/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 10:46:30 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/29 17:36:53 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	ft_output(t_world *philo, char *what)
 	{
 		pthread_mutex_lock(philo->output);
 		if (*(philo->alive) == true)
-			printf("%ld #%d %s\n", ft_what_time_is_it() - philo->t_begin, philo->id, what);
+			printf("%ld #%d %s\n",
+				ft_what_time_is_it() - philo->t_begin, philo->id, what);
 		pthread_mutex_unlock(philo->output);
 	}
 }

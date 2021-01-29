@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 15:47:26 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/29 17:40:20 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	ft_all_ate(t_world *philo)
 	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
 		- philo->t_begin, philo->nb_must_eat);
 	ft_free_all(philo);
-	// exit(0);
 }
 
 void	*ft_supervise(void *ptr)
@@ -34,26 +33,15 @@ void	*ft_supervise(void *ptr)
 			*(philo->alive) = false;
 			sem_wait(philo->output);
 			printf("%ld #%d %s\n",
-				ft_what_time_is_it() - philo->t_begin,
-				philo->id, "has died");
-			// pthread_detach(philo->thid);
-			// ft_free_all(philo);
-			// printf("exits here\n");
+				ft_what_time_is_it() - philo->t_begin, philo->id, "has died");
 			return (NULL);
-			// exit(0);
 		}
-		else if (*(philo->alive) &&philo->nb_must_eat != -1
+		else if (*(philo->alive) && philo->nb_must_eat != -1
 			&& philo->nb_ate >= philo->nb_must_eat)
 		{
 			if (philo->nb_ate == philo->nb_must_eat)
 			{
-				// ft_free_all(philo);
-				// *(philo->alive) = false;
 				pthread_detach(philo->thid);
-				// ft_free_all(philo);
-				// ft_all_ate(philo);
-				// exit(1);
-				// printf("goes in here\n");
 				return (NULL);
 			}
 		}
@@ -83,21 +71,8 @@ void	ft_loop(t_world *philo)
 		ft_usleep(philo->t_tosleep);
 		ft_output(philo, "is thinking");
 	}
-	// printf("waiting to be joined\n");
 	pthread_join(philo->thid, NULL);
-	// printf("joined\n");
-	if (*(philo->alive) == false)
-	{
-		// printf("goes in 0\n");
-		ft_free_all(philo);
-		exit(0);
-	}
-	if (philo->nb_ate == philo->nb_must_eat)
-	{
-		// printf("goes in 1\n");
-		ft_free_all(philo);
-		exit(1);
-	}
+	ft_exit_fork(philo);
 }
 
 void	philo_three(t_world *philo, int check)
@@ -129,21 +104,6 @@ void	philo_three(t_world *philo, int check)
 	philo->pid = NULL;
 }
 
-void	ft_free_all(t_world *philo)
-{
-	// if (philo->pid)
-	// {
-	// 	free(philo->pid);
-	// 	philo->pid = NULL;
-	// }
-	// pthread_join(philo->thid, NULL);
-	sem_close(philo->forks);
-	sem_close(philo->lock_forks);
-	sem_close(philo->nbeat);
-	sem_close(philo->output);
-	ft_sem_unlink_all();
-}
-
 int		main(int ac, char **av)
 {
 	t_init	all;
@@ -163,6 +123,5 @@ int		main(int ac, char **av)
 	sem_close(all.philo.nbeat);
 	sem_close(all.philo.output);
 	ft_sem_unlink_all();
-	// printf("exits here\n");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 11:22:31 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 19:58:29 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/29 17:41:17 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_init_philo(t_init all, int ac, char **av)
 }
 
 void	ft_create_philos(t_world *philo, int i)
-{;
+{
 	if (i != 0)
 	{
 		philo[i].output = philo[0].output;

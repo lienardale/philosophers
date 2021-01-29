@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
+/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 15:39:13 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/29 17:39:51 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	ft_wait(t_world *philo)
 	while (i <= philo->nb_philo)
 	{
 		wpid = waitpid(-1, &status, 0);
-		// printf("exit status:%d\n", WEXITSTATUS(status));
 		if (WEXITSTATUS(status) == 0)
 		{
 			ft_free_all(philo);
@@ -71,5 +70,28 @@ void	ft_wait(t_world *philo)
 			ft_all_ate(philo);
 			break ;
 		}
+	}
+}
+
+void	ft_free_all(t_world *philo)
+{
+	sem_close(philo->forks);
+	sem_close(philo->lock_forks);
+	sem_close(philo->nbeat);
+	sem_close(philo->output);
+	ft_sem_unlink_all();
+}
+
+void	ft_exit_fork(t_world *philo)
+{
+	if (*(philo->alive) == false)
+	{
+		ft_free_all(philo);
+		exit(0);
+	}
+	if (philo->nb_ate == philo->nb_must_eat)
+	{
+		ft_free_all(philo);
+		exit(1);
 	}
 }

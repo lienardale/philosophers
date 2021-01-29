@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_one.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
+/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 10:25:52 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 10:48:09 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/29 17:32:58 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	ft_all_ate(t_world *philo)
 void	*ft_supervise(void *ptr)
 {
 	t_world	*philo;
-	long now;
 
 	philo = (t_world *)ptr;
 	while (*(philo->alive))
@@ -31,9 +30,9 @@ void	*ft_supervise(void *ptr)
 			&& *(philo->alive))
 		{
 			*(philo->alive) = false;
-			now = ft_what_time_is_it() - philo->t_begin;
 			pthread_mutex_lock(philo->output);
-			printf("%ld #%d %s\n", now, philo->id, "has died");
+			printf("%ld #%d %s\n", ft_what_time_is_it() - philo->t_begin,
+				philo->id, "has died");
 			return (NULL);
 		}
 		else if (*(philo->alive) && philo->nb_must_eat != -1
@@ -58,7 +57,8 @@ void	*ft_loop(void *ptr)
 	pthread_detach(philo->sthid);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->t_toeat * 0.9);
-	while (*(philo->alive) && (philo->nb_must_eat == -1 || philo->nb_must_eat > philo->nb_ate))
+	while (*(philo->alive)
+		&& (philo->nb_must_eat == -1 || philo->nb_must_eat > philo->nb_ate))
 	{
 		pthread_mutex_lock(&philo->right_fork);
 		ft_output(philo, "has taken a fork");
@@ -92,7 +92,7 @@ void	philo_one(t_world *philo, int check)
 	i = -1;
 	while (++i < check)
 		pthread_join(philo[i].thid, NULL);
-	i= 0;
+	i = 0;
 	while (i < check)
 		pthread_mutex_destroy(&philo[i++].right_fork);
 	pthread_mutex_destroy(&output);

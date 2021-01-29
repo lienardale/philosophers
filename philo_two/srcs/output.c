@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 19:58:27 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/29 17:42:10 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,28 @@ int		ft_atoi(char *str)
 		i++;
 	}
 	return ((int)(ret * neg));
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	char	*us;
+	size_t	i;
+
+	us = (char *)s;
+	i = 0;
+	while (n > i)
+	{
+		*us = 0;
+		i++;
+	}
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*tab;
+
+	if (!(tab = malloc(size * count)))
+		return (0);
+	ft_bzero(tab, (count * size));
+	return (tab);
 }
