@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 17:40:20 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/29 19:44:24 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	*ft_supervise(void *ptr)
 			sem_wait(philo->output);
 			printf("%ld #%d %s\n",
 				ft_what_time_is_it() - philo->t_begin, philo->id, "has died");
+			// ft_free_all(philo);
 			return (NULL);
 		}
 		else if (*(philo->alive) && philo->nb_must_eat != -1
@@ -41,11 +42,13 @@ void	*ft_supervise(void *ptr)
 		{
 			if (philo->nb_ate == philo->nb_must_eat)
 			{
-				pthread_detach(philo->thid);
+				// ft_free_all(philo);
+				// pthread_detach(philo->thid);
 				return (NULL);
 			}
 		}
 	}
+	// ft_free_all(philo);
 	return (NULL);
 }
 
@@ -71,7 +74,9 @@ void	ft_loop(t_world *philo)
 		ft_usleep(philo->t_tosleep);
 		ft_output(philo, "is thinking");
 	}
+	// printf("philo%d is waiting to be joined\n", philo->id);
 	pthread_join(philo->thid, NULL);
+	// printf("philo%d is joined\n", philo->id);
 	ft_exit_fork(philo);
 }
 
