@@ -6,7 +6,7 @@
 /*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 10:53:22 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/29 13:57:38 by alienard@st      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_all_ate(t_world *philo)
 	sem_wait(philo->output);
 	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
 		- philo->t_begin, philo->nb_must_eat);
-	ft_free_all(philo);
+	// ft_free_all(philo);
 	// exit(0);
 }
 
@@ -36,7 +36,7 @@ void	*ft_supervise(void *ptr)
 			printf("%ld #%d %s\n",
 				ft_what_time_is_it() - philo->t_begin,
 				philo->id, "has died");
-			ft_free_all(philo);
+			// ft_free_all(philo);
 			// printf("exits here\n");
 			return (NULL);
 			// exit(0);
@@ -46,9 +46,12 @@ void	*ft_supervise(void *ptr)
 		{
 			if (philo->nb_ate == philo->nb_must_eat)
 			{
+				ft_free_all(philo);
+				*(philo->alive) = false;
 				// ft_free_all(philo);
 				// ft_all_ate(philo);
 				// exit(1);
+				// printf("goes in here\n");
 				return (NULL);
 			}
 		}
@@ -78,11 +81,21 @@ void	ft_loop(t_world *philo)
 		ft_usleep(philo->t_tosleep);
 		ft_output(philo, "is thinking");
 	}
+	// printf("waiting to be joined\n");
 	pthread_join(philo->thid, NULL);
+	// printf("joined\n");
 	if (philo->nb_ate == philo->nb_must_eat)
+	{
+		// printf("goes in 1\n");
+		ft_free_all(philo);
 		exit(1);
+	}
 	else
+	{
+		// printf("goes in 0\n");
+		ft_free_all(philo);
 		exit(0);
+	}
 }
 
 void	philo_three(t_world *philo, int check)
