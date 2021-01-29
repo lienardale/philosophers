@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_three.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alienard@student.42.fr <alienard>          +#+  +:+       +#+        */
+/*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 13:57:38 by alienard@st      ###   ########.fr       */
+/*   Updated: 2021/01/29 15:28:04 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	*ft_supervise(void *ptr)
 			printf("%ld #%d %s\n",
 				ft_what_time_is_it() - philo->t_begin,
 				philo->id, "has died");
+			// pthread_detach(philo->thid);
 			// ft_free_all(philo);
 			// printf("exits here\n");
 			return (NULL);
@@ -46,8 +47,9 @@ void	*ft_supervise(void *ptr)
 		{
 			if (philo->nb_ate == philo->nb_must_eat)
 			{
-				ft_free_all(philo);
-				*(philo->alive) = false;
+				// ft_free_all(philo);
+				// *(philo->alive) = false;
+				pthread_detach(philo->thid);
 				// ft_free_all(philo);
 				// ft_all_ate(philo);
 				// exit(1);
@@ -84,17 +86,17 @@ void	ft_loop(t_world *philo)
 	// printf("waiting to be joined\n");
 	pthread_join(philo->thid, NULL);
 	// printf("joined\n");
+	if (*(philo->alive) == false)
+	{
+		// printf("goes in 0\n");
+		ft_free_all(philo);
+		exit(0);
+	}
 	if (philo->nb_ate == philo->nb_must_eat)
 	{
 		// printf("goes in 1\n");
 		ft_free_all(philo);
 		exit(1);
-	}
-	else
-	{
-		// printf("goes in 0\n");
-		ft_free_all(philo);
-		exit(0);
 	}
 }
 
