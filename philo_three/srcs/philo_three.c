@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/28 20:06:13 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/28 20:38:38 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	ft_all_ate(t_world *philo)
 	sem_wait(philo->output);
 	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
 		- philo->t_begin, philo->nb_must_eat);
+	ft_free_all(philo);
 	exit(0);
 }
 
@@ -35,13 +36,17 @@ void	*ft_supervise(void *ptr)
 			printf("%ld #%d %s\n",
 				ft_what_time_is_it() - philo->t_begin,
 				philo->id, "has died");
+			ft_free_all(philo);
 			exit(0);
 		}
 		else if (*(philo->alive) &&philo->nb_must_eat != -1
 			&& philo->nb_ate >= philo->nb_must_eat)
 		{
 			if (philo->nb_ate == philo->nb_must_eat)
+			{
+				ft_free_all(philo);
 				exit(1);
+			}
 			return (NULL);
 		}
 	}
@@ -96,6 +101,22 @@ void	philo_three(t_world philo, int check)
 	while (++i < philo.nb_philo)
 		kill(philo.pid[i], SIGTERM);
 	free(philo.pid);
+	philo.pid = NULL;
+}
+
+void	ft_free_all(t_world *philo)
+{
+	if (philo->pid)
+	{
+		free(philo->pid);
+		philo->pid = NULL;
+	}
+	pthread_join(philo->thid, NULL);
+	sem_close(philo->forks);
+	sem_close(philo->lock_forks);
+	sem_close(philo->nbeat);
+	sem_close(philo->output);
+	ft_sem_unlink_all();
 }
 
 int		main(int ac, char **av)
