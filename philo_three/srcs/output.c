@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 19:44:16 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/30 11:36:12 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,13 @@ void	ft_wait(t_world *philo)
 		// ft_free_all(philo);
 		if (WEXITSTATUS(status) == 0)
 		{
+			i = -1;
+			while (++i < philo->nb_philo)
+				kill(philo->pid[i], SIGTERM);
+			// free(philo->pid);
 			ft_free_all(philo);
-			i++;
-			// break ;
+			// i++;
+			break ;
 		}
 		else
 		{
@@ -96,7 +100,9 @@ void	ft_free_all(t_world *philo)
 	sem_close(philo->forks);
 	sem_close(philo->lock_forks);
 	sem_close(philo->nbeat);
+	// sem_post(philo->output);
 	sem_close(philo->output);
+	sem_close(philo->state);
 	ft_sem_unlink_all();
 }
 

@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 19:44:24 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/30 11:36:42 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ void	*ft_supervise(void *ptr)
 		{
 			*(philo->alive) = false;
 			sem_wait(philo->output);
+			sem_post(philo->state);
 			printf("%ld #%d %s\n",
 				ft_what_time_is_it() - philo->t_begin, philo->id, "has died");
+
 			// ft_free_all(philo);
 			return (NULL);
 		}
@@ -42,18 +44,22 @@ void	*ft_supervise(void *ptr)
 		{
 			if (philo->nb_ate == philo->nb_must_eat)
 			{
+				sem_post(philo->state);
 				// ft_free_all(philo);
 				// pthread_detach(philo->thid);
 				return (NULL);
 			}
 		}
+		
 	}
+	// sem_wait(philo->state);
 	// ft_free_all(philo);
 	return (NULL);
 }
 
 void	ft_loop(t_world *philo)
 {
+	// printf("sem_value:%d\n", *(philo->state_value));
 	pthread_create(&philo->thid, NULL, ft_supervise, philo);
 	while (*(philo->alive) == true
 		&& (philo->nb_must_eat == -1 || philo->nb_must_eat > philo->nb_ate))
@@ -75,6 +81,9 @@ void	ft_loop(t_world *philo)
 		ft_output(philo, "is thinking");
 	}
 	// printf("philo%d is waiting to be joined\n", philo->id);
+	// printf("sem_value:%d\n", *(philo->state_value));
+	sem_wait(philo->state);
+	// printf("sem_value:%d\n", (philo->state_value));
 	pthread_join(philo->thid, NULL);
 	// printf("philo%d is joined\n", philo->id);
 	ft_exit_fork(philo);
@@ -88,6 +97,7 @@ void	philo_three(t_world *philo, int check)
 	philo->pid = malloc(sizeof(pid_t) * philo->nb_philo);
 	if (!(philo->pid))
 		return ;
+	// printf("sem_value:%d\n", (philo->state_value));
 	while (++i < check)
 	{
 		philo->pid[i] = fork();
@@ -102,6 +112,7 @@ void	philo_three(t_world *philo, int check)
 	if (philo->pid)
 	{
 		i = -1;
+		// sem_post(philo->output);
 		while (++i < philo->nb_philo)
 			kill(philo->pid[i], SIGTERM);
 		free(philo->pid);
@@ -122,7 +133,8 @@ int		main(int ac, char **av)
 	all.full = 0;
 	all.alive = true;
 	ft_init_philo(&all, ac, av);
-	philo_three(&all.philo, all.check);
+	// printf("sem_value:%d\n", (all.philo.state_value));
+	philo_three(&(all.philo), all.check);
 	sem_close(all.philo.forks);
 	sem_close(all.philo.lock_forks);
 	sem_close(all.philo.nbeat);
