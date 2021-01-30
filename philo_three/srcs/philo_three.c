@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/30 11:36:42 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/30 11:41:16 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,7 @@ int		main(int ac, char **av)
 	ft_init_philo(&all, ac, av);
 	// printf("sem_value:%d\n", (all.philo.state_value));
 	philo_three(&(all.philo), all.check);
-	sem_close(all.philo.forks);
-	sem_close(all.philo.lock_forks);
-	sem_close(all.philo.nbeat);
-	sem_close(all.philo.output);
-	ft_sem_unlink_all();
+	ft_free_all(&(all.philo));
+	// printf("exit    thhhis way\n");
 	return (0);
 }

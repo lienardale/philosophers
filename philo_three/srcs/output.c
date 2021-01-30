@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/30 11:36:12 by alienard         ###   ########.fr       */
+/*   Updated: 2021/01/30 11:42:49 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	ft_wait(t_world *philo)
 		{
 			i = -1;
 			while (++i < philo->nb_philo)
-				kill(philo->pid[i], SIGTERM);
+				kill(philo->pid[i], SIGKILL);
 			// free(philo->pid);
 			ft_free_all(philo);
 			// i++;
