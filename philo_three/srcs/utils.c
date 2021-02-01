@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 11:22:31 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/30 11:05:05 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 09:30:43 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@ void	ft_init_philo(t_init *all, int ac, char **av)
 	i = 1;
 	all->philo.forks = sem_open("forks", O_CREAT | O_EXCL, 0700, all->check);
 	all->philo.lock_forks = sem_open("lock_forks", O_CREAT | O_EXCL, 0700, 1);
-	
 	all->philo.state = sem_open("state", O_CREAT | O_EXCL, 0700, i);
 	all->philo.state_value = &i;
-	// printf("sem_value:%d\n", (all->philo.state_value));
-	
 	all->philo.nbeat = sem_open("nbeat", O_CREAT | O_EXCL, 0700, all->check);
 	all->philo.output = sem_open("output", O_CREAT | O_EXCL, 0700, 1);
 	all->philo.nb_philo = all->check;
