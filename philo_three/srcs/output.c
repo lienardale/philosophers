@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/02/01 09:29:36 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 09:52:09 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,11 @@ void	ft_wait(t_world *philo)
 {
 	int		i;
 	int		status;
-	pid_t	wpid;
 
 	i = 0;
 	while (i <= philo->nb_philo)
 	{
-		wpid = waitpid(-1, &status, 0);
+		philo->wpid = waitpid(-1, &status, 0);
 		if (WEXITSTATUS(status) == 0)
 		{
 			i = -1;

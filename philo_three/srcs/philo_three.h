@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:38:39 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/30 10:26:04 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 09:51:31 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,11 @@ typedef struct		s_world
 	sem_t			*lock_forks;
 	sem_t			*nbeat;
 	sem_t			*output;
-	
 	int				*state_value;
-	
 	sem_t			*state;
-
 	pthread_t		thid;
 	pthread_t		sthid;
+	pid_t			wpid;
 	int				nb_philo;
 	int				t_todie;
 	int				t_toeat;

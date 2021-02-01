@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/02/01 09:30:26 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 09:41:05 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,10 @@ void	*ft_supervise(void *ptr)
 		else if (*(philo->alive) && philo->nb_must_eat != -1
 			&& philo->nb_ate >= philo->nb_must_eat)
 		{
-			if (philo->nb_ate == philo->nb_must_eat)
-			{
-				sem_post(philo->state);
+			if (philo->nb_ate == philo->nb_must_eat
+				&& !(sem_post(philo->state)))
 				return (NULL);
-			}
 		}
-		
 	}
 	return (NULL);
 }
