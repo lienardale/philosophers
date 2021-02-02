@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 16:08:36 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 17:42:15 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 19:47:11 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct		s_world
 	long			t_last_eat;
 	int				nb_ate;
 	int				id;
+	sem_t			*lock_alive;
 	bool			*alive;
 	int				*full;
 }					t_world;
@@ -67,5 +68,6 @@ void				ft_sem_unlink_all(void);
 void				ft_create_philos(t_world *philo, int i);
 void				*ft_calloc(size_t count, size_t size);
 void				ft_bzero(void *s, size_t n);
+void				*ft_all_ate(t_world *philo);
 
 #endif

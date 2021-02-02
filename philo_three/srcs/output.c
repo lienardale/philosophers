@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/02/01 09:52:09 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 16:43:22 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,9 @@ void	ft_wait(t_world *philo)
 			i++;
 		if (i == philo->nb_philo && philo->nb_must_eat != -1)
 		{
-			ft_all_ate(philo);
+			sem_wait(philo->output);
 			break ;
 		}
-		if (i == philo->nb_philo)
-			break ;
 	}
 }
 
@@ -86,17 +84,23 @@ void	ft_free_all(t_world *philo)
 	}
 	sem_close(philo->forks);
 	sem_close(philo->lock_forks);
-	sem_close(philo->nbeat);
 	sem_close(philo->output);
-	sem_close(philo->state);
 	ft_sem_unlink_all();
 }
 
 void	ft_exit_fork(t_world *philo)
 {
-	ft_free_all(philo);
 	if (*(philo->alive) == false)
+	{
+		sem_wait(philo->output);
+		printf("%ld #%d %s\n",
+			ft_what_time_is_it() - philo->t_begin, philo->id, "has died");
+		ft_free_all(philo);
 		exit(0);
+	}
 	if (philo->nb_ate == philo->nb_must_eat)
+	{
+		ft_free_all(philo);
 		exit(1);
+	}
 }

@@ -6,19 +6,11 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:39:11 by alienard          #+#    #+#             */
-/*   Updated: 2021/02/01 09:41:05 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 16:43:30 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
-
-void	ft_all_ate(t_world *philo)
-{
-	sem_wait(philo->output);
-	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
-		- philo->t_begin, philo->nb_must_eat);
-	ft_free_all(philo);
-}
 
 void	*ft_supervise(void *ptr)
 {
@@ -31,17 +23,12 @@ void	*ft_supervise(void *ptr)
 			&& *(philo->alive))
 		{
 			*(philo->alive) = false;
-			sem_wait(philo->output);
-			sem_post(philo->state);
-			printf("%ld #%d %s\n",
-				ft_what_time_is_it() - philo->t_begin, philo->id, "has died");
 			return (NULL);
 		}
 		else if (*(philo->alive) && philo->nb_must_eat != -1
 			&& philo->nb_ate >= philo->nb_must_eat)
 		{
-			if (philo->nb_ate == philo->nb_must_eat
-				&& !(sem_post(philo->state)))
+			if (philo->nb_ate == philo->nb_must_eat)
 				return (NULL);
 		}
 	}
@@ -57,12 +44,14 @@ void	ft_loop(t_world *philo)
 		sem_wait(philo->lock_forks);
 		sem_wait(philo->forks);
 		ft_output(philo, "has taken a fork");
+		if (philo->nb_philo <= 1)
+			break ;
 		sem_wait(philo->forks);
 		ft_output(philo, "has taken a fork");
 		sem_post(philo->lock_forks);
-		philo->t_last_eat = ft_what_time_is_it();
 		ft_output(philo, "is eating");
 		ft_usleep(philo->t_toeat);
+		philo->t_last_eat = ft_what_time_is_it();
 		sem_post(philo->forks);
 		sem_post(philo->forks);
 		philo->nb_ate++;
@@ -70,7 +59,6 @@ void	ft_loop(t_world *philo)
 		ft_usleep(philo->t_tosleep);
 		ft_output(philo, "is thinking");
 	}
-	sem_wait(philo->state);
 	pthread_join(philo->thid, NULL);
 	ft_exit_fork(philo);
 }

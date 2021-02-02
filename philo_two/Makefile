@@ -11,6 +11,7 @@ HEADER = philo_two.h
 SRC = philo_two \
 	output \
 	utils \
+	all_ate \
 
 FIL = $(addsuffix .c, $(addprefix srcs/, $(SRC)))
 

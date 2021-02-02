@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:41:16 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 17:42:10 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 17:20:03 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	ft_output(t_world *philo, char *what)
 	long	now;
 
 	now = ft_what_time_is_it() - philo->t_begin;
+	sem_wait(philo->lock_alive);
 	if (*(philo->alive))
 	{
 		sem_wait(philo->output);
@@ -24,6 +25,7 @@ void	ft_output(t_world *philo, char *what)
 			printf("%ld #%d %s\n", now, philo->id, what);
 		sem_post(philo->output);
 	}
+	sem_post(philo->lock_alive);
 }
 
 int		ft_check_args(int ac, char **av)

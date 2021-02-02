@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 11:22:31 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 17:41:17 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 18:16:44 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	ft_init_philo(t_init all, int ac, char **av)
 {
 	all.philo[0].forks = sem_open("forks", O_CREAT | O_EXCL, 0700, all.check);
 	all.philo[0].lock_forks = sem_open("lock_forks", O_CREAT | O_EXCL, 0700, 1);
+	all.philo[0].lock_alive = sem_open("lock_alive", O_CREAT | O_EXCL, 0700, 1);
 	all.philo[0].output = sem_open("output", O_CREAT | O_EXCL, 0700, 1);
 	all.philo[0].nb_philo = all.check;
 	all.philo[0].t_todie = ft_atoi(av[2]);
@@ -40,6 +41,7 @@ void	ft_create_philos(t_world *philo, int i)
 		philo[i].output = philo[0].output;
 		philo[i].forks = philo[0].forks;
 		philo[i].lock_forks = philo[0].lock_forks;
+		philo[i].lock_alive = philo[0].lock_alive;
 		philo[i].nb_philo = philo[0].nb_philo;
 		philo[i].t_todie = philo[0].t_todie;
 		philo[i].t_toeat = philo[0].t_toeat;
@@ -79,4 +81,5 @@ void	ft_sem_unlink_all(void)
 	sem_unlink("forks");
 	sem_unlink("lock_forks");
 	sem_unlink("output");
+	sem_unlink("lock_alive");
 }

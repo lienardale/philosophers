@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 13:38:39 by alienard          #+#    #+#             */
-/*   Updated: 2021/02/01 09:51:31 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 16:44:16 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,8 @@ typedef struct		s_world
 	pid_t			*pid;
 	sem_t			*forks;
 	sem_t			*lock_forks;
-	sem_t			*nbeat;
 	sem_t			*output;
-	int				*state_value;
-	sem_t			*state;
 	pthread_t		thid;
-	pthread_t		sthid;
 	pid_t			wpid;
 	int				nb_philo;
 	int				t_todie;
@@ -72,6 +68,5 @@ void				ft_sem_unlink_all(void);
 void				ft_free_all(t_world *philo);
 void				ft_exit_fork(t_world *philo);
 void				ft_wait(t_world *philo);
-void				ft_all_ate(t_world *philo);
 
 #endif

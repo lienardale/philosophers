@@ -6,17 +6,22 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/20 16:08:39 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 17:42:02 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 19:47:27 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-void	ft_all_ate(t_world *philo)
+void	ft_eat_sleep_think(t_world *philo)
 {
-	*(philo->alive) = false;
-	printf("%ld Everyone ate %d times.\n", ft_what_time_is_it()
-		- philo->t_begin, philo->nb_must_eat);
+	ft_output(philo, "is eating");
+	ft_usleep(philo->t_toeat);
+	philo->nb_ate++;
+	sem_post(philo->forks);
+	sem_post(philo->forks);
+	ft_output(philo, "is sleeping");
+	ft_usleep(philo->t_tosleep);
+	ft_output(philo, "is thinking");
 }
 
 void	*ft_supervise(void *ptr)
@@ -26,6 +31,7 @@ void	*ft_supervise(void *ptr)
 	philo = (t_world *)ptr;
 	while (*(philo->alive) == true)
 	{
+		sem_wait(philo->lock_alive);
 		if (ft_what_time_is_it() - philo->t_last_eat > philo->t_todie
 			&& *(philo->alive))
 		{
@@ -33,17 +39,13 @@ void	*ft_supervise(void *ptr)
 			printf("%ld #%d %s\n",
 				ft_what_time_is_it() - philo->t_begin,
 				philo->id, "has died");
+			sem_post(philo->lock_alive);
 			return (NULL);
 		}
 		else if (*(philo->alive) && philo->nb_must_eat != -1
 			&& philo->nb_ate >= philo->nb_must_eat)
-		{
-			if (philo->nb_ate == philo->nb_must_eat)
-				*(philo->full) += 1;
-			if (*(philo->full) == philo[0].nb_philo)
-				ft_all_ate(philo);
-			return (NULL);
-		}
+			return (ft_all_ate(philo));
+		sem_post(philo->lock_alive);
 	}
 	return (NULL);
 }
@@ -60,18 +62,13 @@ void	*ft_loop(void *ptr)
 		sem_wait(philo->lock_forks);
 		sem_wait(philo->forks);
 		ft_output(philo, "has taken a fork");
+		if (philo->nb_philo <= 1)
+			break ;
 		sem_wait(philo->forks);
 		ft_output(philo, "has taken a fork");
 		sem_post(philo->lock_forks);
 		philo->t_last_eat = ft_what_time_is_it();
-		ft_output(philo, "is eating");
-		ft_usleep(philo->t_toeat);
-		philo->nb_ate++;
-		sem_post(philo->forks);
-		sem_post(philo->forks);
-		ft_output(philo, "is sleeping");
-		ft_usleep(philo->t_tosleep);
-		ft_output(philo, "is thinking");
+		ft_eat_sleep_think(philo);
 	}
 	pthread_join(philo->sthid, NULL);
 	return (NULL);
@@ -116,6 +113,7 @@ int		main(int ac, char **av)
 	sem_close(all.philo[0].forks);
 	sem_close(all.philo[0].lock_forks);
 	sem_close(all.philo[0].output);
+	sem_close(all.philo[0].lock_alive);
 	ft_sem_unlink_all();
 	free(all.philo);
 	return (0);

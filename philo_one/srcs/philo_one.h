@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:43:35 by alienard          #+#    #+#             */
-/*   Updated: 2021/01/29 17:34:44 by alienard         ###   ########.fr       */
+/*   Updated: 2021/02/01 19:55:56 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct		s_world
 	long			t_last_eat;
 	int				nb_ate;
 	int				id;
+	pthread_mutex_t	*lock_alive;
 	bool			*alive;
 	int				*full;
 }					t_world;
@@ -62,5 +63,6 @@ void				ft_output(t_world *philo, char *what);
 long				ft_what_time_is_it(void);
 void				ft_usleep(int length);
 int					ft_atoi(char *str);
+void				*ft_all_ate(t_world *philo);
 
 #endif
